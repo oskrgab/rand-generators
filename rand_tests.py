@@ -1,5 +1,6 @@
 from generators import randu, dessert_island
 from scipy.stats import chisquare
+import numpy as np
 
 
 def gof_test(sample, alpha=0.05, bins=256):
@@ -18,14 +19,10 @@ def gof_test(sample, alpha=0.05, bins=256):
     :return: True if we can't reject the null hypothesis of uniformity, False otherwise
     """
 
-    _, p_value = chisquare(sample)
+    intervals = np.linspace(0, 1, bins)
+    observations, _ = np.histogram(sample, intervals)
 
-    return True if alpha < p_value < 1 - alpha else False
+    _, p_value = chisquare(observations)
 
+    return True if alpha < p_value < 1 - alpha else False, p_value
 
-obs = [179, 208, 222, 199, 192]
-
-a = chisquare(obs)
-#%%
-obs_2 = [190, 200, 150, 230]
-a_2 = chisquare(obs_2)
