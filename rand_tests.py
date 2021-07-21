@@ -1,5 +1,4 @@
-from generators import randu, dessert_island
-from scipy.stats import chisquare, norm
+from scipy.stats import chisquare, norm, kstest
 import numpy as np
 
 
@@ -53,6 +52,48 @@ def run_test_up_down(sample, alpha=0.05):
     var_a = (16 * n - 29) / 90
 
     z0 = (a - mu_a) / np.sqrt(var_a)
+    z = norm.ppf(1 - alpha / 2)
+
+    return True if abs(z0) < z else False, z0
+
+
+def ks_test(sample, alpha=0.05):
+    """
+    Kolmogorov-Smirnov test. It is basically the same implementation as the one in scipy
+    with the added difference that a boolean is returned on whether the null hypothesis
+    of uniformity is not rejected (True) and false otherwise.
+
+    :param sample: Generated samples from random generators
+    :param alpha: Significance level, default of 0.05
+    :return: True if we fail to reject the null hypothesis of uniformity. Also returns
+    the p-value corresponding to the Kolmogorov-Smirnov test.
+    """
+
+    d0, p_value = kstest(sample, "uniform")
+
+    return True if alpha < p_value else False, p_value
+
+
+def correlation_test(sample, alpha=0.05):
+    """
+    Correlation test using class notes
+
+    :param sample: Generated samples from random generators
+    :param alpha: Significance level, default of 0.05
+    :return: True if we fail to reject the null hypothesis of independence, False
+    otherwise.
+    """
+
+    rho = 0
+    n = len(sample)
+
+    for k, rk in enumerate(sample[:-1]):
+        rho += rk * sample[k + 1]
+
+    rho = (12 / (n - 1)) * rho - 3
+    var_rho = (13 * n - 19) / (n - 1) ** 2
+
+    z0 = rho / np.sqrt(var_rho)
     z = norm.ppf(1 - alpha / 2)
 
     return True if abs(z0) < z else False, z0
