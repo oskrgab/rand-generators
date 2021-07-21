@@ -57,6 +57,36 @@ def run_test_up_down(sample, alpha=0.05):
     return True if abs(z0) < z else False, z0
 
 
+def run_test_above_below_mean(sample, alpha=0.05):
+    """
+    Run test for above and below the mean.
+
+    :param sample: Generated samples from random generators
+    :param alpha: Significance level, default of 0.05
+    :return: True if we fail to reject the null hypothesis of independence. Also returns
+    the z0 statistic.
+    """
+
+    above_below = sample >= 0.5
+    n = len(sample)
+    n1 = sum(above_below)
+    n2 = n - n1
+
+    b = 1
+    # Counting all the ups and downs
+    for i, x in enumerate(above_below[:-1]):
+        if x != above_below[i + 1]:
+            b += 1
+
+    mu_b = ((2 * n1 * n2) / n) + 0.5
+    var_b = (2 * n1 * n2 * (2 * n1 * n2 - n)) / ((n ** 2) * (n - 1))
+
+    z0 = (b - mu_b) / np.sqrt(var_b)
+    z = norm.ppf(1 - alpha / 2)
+
+    return True if abs(z0) < z else False, z0
+
+
 def ks_test(sample, alpha=0.05):
     """
     Kolmogorov-Smirnov test. It is basically the same implementation as the one in scipy

@@ -52,3 +52,19 @@ def dessert_island(seed, size=1):
 
     return lcg(seed, a, c, m, size)
 
+
+def glibc(seed, size=1):
+    """
+    The glibc (gcc) bits 30.0 generator
+
+    :param seed: Any integer between 1 and 2^31 - 1
+    :param size: Determines the size of the sample of PRN's
+    :return: Returns a numpy array with "size" length
+
+    """
+    a = 1103515245
+    c = 12345
+    m = 2 ** 31 - 1
+
+    return lcg(seed, a, c, m, size)
+
