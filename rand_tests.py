@@ -26,3 +26,15 @@ def gof_test(sample, alpha=0.05, bins=256):
 
     return True if alpha < p_value < 1 - alpha else False, p_value
 
+
+def run_test_up_down(sample, alpha=0.05):
+    """
+
+    :param sample:
+    :param alpha:
+    :return:
+    """
+
+    a = 0
+
+    for i, x in enumerate(sample):
