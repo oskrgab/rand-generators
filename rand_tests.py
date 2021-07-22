@@ -78,8 +78,8 @@ def run_test_above_below_mean(sample, alpha=0.05):
         if x != above_below[i + 1]:
             b += 1
 
-    mu_b = ((2 * n1 * n2) / n) + 0.5
-    var_b = (2 * n1 * n2 * (2 * n1 * n2 - n)) / ((n ** 2) * (n - 1))
+    mu_b = ((2.0 * n1 * n2) / n) + 0.5
+    var_b = (2.0 * n1 * n2 * (2.0 * n1 * n2 - n)) / ((n ** 2.0) * (n - 1))
 
     z0 = (b - mu_b) / np.sqrt(var_b)
     z = norm.ppf(1 - alpha / 2)
